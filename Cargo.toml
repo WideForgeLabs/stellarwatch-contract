@@ -1,0 +1,11 @@
+[workspace]
+members = [
+    "contracts/contract-registry",
+    "contracts/health-registry",
+    "contracts/alert-rules",
+    "shared",
+]
+resolver = "2"
+
+[workspace.dependencies]
+soroban-sdk = "21.0.0"
