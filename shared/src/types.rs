@@ -1,4 +1,4 @@
-use soroban_sdk::{Address, BytesN, String, Vec};
+use soroban_sdk::{Address, BytesN, String};
 
 #[derive(Clone, Debug, PartialEq)]
 #[repr(u32)]
