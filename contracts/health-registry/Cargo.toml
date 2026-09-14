@@ -7,6 +7,9 @@ edition = "2021"
 soroban-sdk = { workspace = true }
 stellarwatch-shared = { path = "../../shared" }
 
+[dev-dependencies]
+soroban-sdk = { workspace = true, features = ["testutils"] }
+
 [lib]
 crate-type = ["cdylib", "rlib"]
 
