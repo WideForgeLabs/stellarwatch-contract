@@ -89,11 +89,11 @@ fn test_pause_and_resume() {
 
     client.initialize(&registry, &health);
 
-    assert_eq!(client.is_paused(), false);
+    assert!(!client.is_paused());
     client.pause_alerts();
-    assert_eq!(client.is_paused(), true);
+    assert!(client.is_paused());
     client.resume_alerts();
-    assert_eq!(client.is_paused(), false);
+    assert!(!client.is_paused());
 }
 
 #[test]
