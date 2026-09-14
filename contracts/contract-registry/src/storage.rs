@@ -28,9 +28,11 @@ pub fn extend_instance_ttl(env: &Env) {
 }
 
 pub fn extend_persistent_ttl(env: &Env, key: &DataKey) {
-    env.storage()
-        .persistent()
-        .extend_ttl(key, PERSISTENT_LIFETIME_THRESHOLD, PERSISTENT_BUMP_AMOUNT);
+    env.storage().persistent().extend_ttl(
+        key,
+        PERSISTENT_LIFETIME_THRESHOLD,
+        PERSISTENT_BUMP_AMOUNT,
+    );
 }
 
 pub fn get_instance(env: &Env) -> Option<RegistryConfig> {
@@ -54,6 +56,7 @@ pub fn set_contract(env: &Env, contract_id: &BytesN<32>, metadata: &ContractMeta
     extend_persistent_ttl(env, &key);
 }
 
+#[allow(dead_code)]
 pub fn get_contract(env: &Env, contract_id: &BytesN<32>) -> Option<ContractMetadata> {
     env.storage()
         .persistent()

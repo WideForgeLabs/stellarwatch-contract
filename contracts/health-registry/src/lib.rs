@@ -60,19 +60,13 @@ impl HealthRegistry {
         storage::set_record(&env, &contract_id, new_index, &record);
         storage::set_counter(&env, &contract_id, new_index);
 
-        env.events().publish(
-            ("health", "recorded"),
-            (contract_id, now, status, message),
-        );
+        env.events()
+            .publish(("health", "recorded"), (contract_id, now, status, message));
 
         Ok(())
     }
 
-    pub fn get_health_history(
-        env: Env,
-        contract_id: BytesN<32>,
-        limit: u32,
-    ) -> Vec<HealthRecord> {
+    pub fn get_health_history(env: Env, contract_id: BytesN<32>, limit: u32) -> Vec<HealthRecord> {
         let counter = storage::get_counter(&env, &contract_id);
         let mut records = Vec::new(&env);
 

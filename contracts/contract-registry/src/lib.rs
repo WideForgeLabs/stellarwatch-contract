@@ -54,10 +54,8 @@ impl ContractRegistry {
 
         storage::set_contract(&env, &contract_id, &metadata);
 
-        env.events().publish(
-            ("registry", "registered"),
-            (contract_id, name, deployer),
-        );
+        env.events()
+            .publish(("registry", "registered"), (contract_id, name, deployer));
 
         Ok(())
     }
@@ -73,10 +71,8 @@ impl ContractRegistry {
 
         storage::remove_contract(&env, &contract_id);
 
-        env.events().publish(
-            ("registry", "unregistered"),
-            (contract_id,),
-        );
+        env.events()
+            .publish(("registry", "unregistered"), (contract_id,));
 
         Ok(())
     }

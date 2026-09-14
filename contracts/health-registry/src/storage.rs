@@ -30,9 +30,11 @@ pub fn extend_instance_ttl(env: &Env) {
 }
 
 pub fn extend_persistent_ttl(env: &Env, key: &DataKey) {
-    env.storage()
-        .persistent()
-        .extend_ttl(key, PERSISTENT_LIFETIME_THRESHOLD, PERSISTENT_BUMP_AMOUNT);
+    env.storage().persistent().extend_ttl(
+        key,
+        PERSISTENT_LIFETIME_THRESHOLD,
+        PERSISTENT_BUMP_AMOUNT,
+    );
 }
 
 // Instance storage
@@ -66,17 +68,13 @@ pub fn get_record(env: &Env, contract_id: &BytesN<32>, index: u64) -> Option<Hea
         .get(&DataKey::Record(contract_id.clone(), index))
 }
 
-pub fn set_record(
-    env: &Env,
-    contract_id: &BytesN<32>,
-    index: u64,
-    record: &HealthRecord,
-) {
+pub fn set_record(env: &Env, contract_id: &BytesN<32>, index: u64, record: &HealthRecord) {
     let key = DataKey::Record(contract_id.clone(), index);
     env.storage().persistent().set(&key, record);
     extend_persistent_ttl(env, &key);
 }
 
+#[allow(dead_code)]
 pub fn remove_record(env: &Env, contract_id: &BytesN<32>, index: u64) {
     env.storage()
         .persistent()
