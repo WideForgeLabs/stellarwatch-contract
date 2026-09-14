@@ -11,11 +11,7 @@ pub struct AlertRules;
 
 #[contractimpl]
 impl AlertRules {
-    pub fn initialize(
-        env: Env,
-        registry: Address,
-        health_registry: Address,
-    ) -> Result<(), Error> {
+    pub fn initialize(env: Env, registry: Address, health_registry: Address) -> Result<(), Error> {
         let owner = env.current_contract_address();
         owner.require_auth();
 
