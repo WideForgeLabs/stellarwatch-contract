@@ -2,9 +2,15 @@
 
 On-chain health monitoring and alerting infrastructure for the Stellar ecosystem.
 
-## What This Is
+[![CI](https://github.com/WideForgeLabs/stellarwatch-contract/actions/workflows/ci.yml/badge.svg)](https://github.com/WideForgeLabs/stellarwatch-contract/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Rust](https://img.shields.io/badge/rust-1.80%2B-orange.svg)](https://www.rust-lang.org/)
 
-StellarWatch is an open-source monitoring platform for Soroban smart contracts. It tracks contract health (TTL expiry, invocation failures, state drift) and records health states on-chain via Soroban contracts, creating a verifiable audit trail.
+## Overview
+
+StellarWatch is an open-source monitoring platform for Soroban smart contracts on the Stellar network. Soroban contracts have TTLs that expire, storage that can drift, and invocation patterns that need watching. Currently, no open-source tool exists to monitor these on-chain.
+
+StellarWatch fills this gap by recording health states on-chain via Soroban contracts, creating a verifiable audit trail. Operators configure alert rules stored in contracts, and the platform emits events when thresholds are crossed.
 
 This repository contains the Soroban smart contracts that power the platform.
 
@@ -12,54 +18,50 @@ This repository contains the Soroban smart contracts that power the platform.
 
 Three contracts form the core:
 
-- **contract-registry**: Tracks which contracts are being monitored
-- **health-registry**: Records health check results with on-chain timestamping
-- **alert-rules**: Stores configurable threshold rules for automated alerts
+### contract-registry
+Tracks which contracts are being monitored. Stores metadata per contract: name, version, deployer, registration timestamp, and last health check timestamp.
 
-## Status
+### health-registry
+Records health check results with on-chain timestamping. Each record captures status (Healthy, Degraded, Unhealthy, Unknown), response time, message, and block height. Supports querying history per contract.
 
-The contracts are implemented and compile to WASM. Deployment to testnet/mainnet is pending RPC stability.
+### alert-rules
+Stores configurable threshold rules for automated alerts. Rules can target specific contracts. Supports pause/resume for maintenance windows.
+
+All contracts implement **TTL extension on every persistent write** to prevent storage expiration on mainnet — a critical requirement for Soroban production deployments.
+
+## Current Status
+
+| Contract | Logic | TTL | Tests |
+|----------|:-----:|:---:|:-----:|
+| contract-registry | Yes | Yes | 4 |
+| health-registry | Yes | Yes | 5 |
+| alert-rules | Yes | Yes | 5 |
+| **Total** | | | **14** |
+
+CI runs on every push: format check, clippy, WASM build, tests.
 
 ## Repo Structure
-contracts/
-contract-registry/ # Contract metadata and registration
-health-registry/ # Health check records
-alert-rules/ # Alert threshold rules
-shared/ # Shared types and errors
+stellarwatch-contract/
+├── contracts/
+│ ├── contract-registry/ # Contract metadata and registration
+│ ├── health-registry/ # Health check records
+│ └── alert-rules/ # Alert threshold rules
+├── shared/ # Shared types and errors
+├── scripts/
+│ └── deploy.sh # Deploy all three contracts in order
+├── .github/workflows/ci.yml # CI pipeline
+├── Cargo.toml # Workspace definition
+└── rust-toolchain.toml # Pinned Rust toolchain
 
 text
+
+## Requirements
+
+- Rust 1.80 or later
+- `wasm32-unknown-unknown` target
+- Stellar CLI (for deployment)
 
 ## Build
 
-Run the following command to build the contracts:
-
 ```bash
-cargo build --target wasm32-unknown-unknown
-Tech Stack
-Rust (soroban-sdk 21.x)
-
-Soroban smart contracts
-
-WASM target
-
-Maintainers
-@Ikechukwu-Patrick
-
-@martinifeanyi058-ship-it
-
-Contributing
-See CONTRIBUTING.md for guidelines.
-
-License
-MIT
-
-text
-
-Save with `Ctrl+O`, then `Enter`, then exit with `Ctrl+X`.
-
----
-
-## Step 2: Remove the Leftover tx.xdr File
-
-```bash
-rm -f tx.xdr
+cargo build --target wasm32-unknown-unknown --release
