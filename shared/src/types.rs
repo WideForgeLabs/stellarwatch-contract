@@ -1,7 +1,7 @@
-use soroban_sdk::{Address, BytesN, String};
+use soroban_sdk::{contracttype, Address, BytesN, String};
 
-#[derive(Clone, Debug, PartialEq)]
-#[repr(u32)]
+#[contracttype]
+#[derive(Clone, Copy, Debug, PartialEq)]
 pub enum HealthStatus {
     Healthy = 0,
     Degraded = 1,
@@ -9,6 +9,7 @@ pub enum HealthStatus {
     Unknown = 3,
 }
 
+#[contracttype]
 #[derive(Clone, Debug, PartialEq)]
 pub struct HealthRecord {
     pub timestamp: u64,
@@ -19,6 +20,7 @@ pub struct HealthRecord {
     pub block_height: u32,
 }
 
+#[contracttype]
 #[derive(Clone, Debug, PartialEq)]
 pub struct ContractMetadata {
     pub name: String,
@@ -29,8 +31,8 @@ pub struct ContractMetadata {
     pub active: bool,
 }
 
-#[derive(Clone, Debug, PartialEq)]
-#[repr(u32)]
+#[contracttype]
+#[derive(Clone, Copy, Debug, PartialEq)]
 pub enum AlertCondition {
     ResponseTime = 0,
     TTLExpiry = 1,
@@ -39,18 +41,19 @@ pub enum AlertCondition {
     Custom = 4,
 }
 
-#[derive(Clone, Debug, PartialEq)]
-#[repr(u32)]
+#[contracttype]
+#[derive(Clone, Copy, Debug, PartialEq)]
 pub enum Severity {
     Info = 0,
     Warn = 1,
     Critical = 2,
 }
 
+#[contracttype]
 #[derive(Clone, Debug, PartialEq)]
 pub struct AlertRule {
     pub id: u64,
-    pub contract_id: Option<BytesN<32>>,
+    pub contract_id: BytesN<32>,
     pub condition: AlertCondition,
     pub severity: Severity,
     pub threshold_value: u64,
@@ -60,6 +63,7 @@ pub struct AlertRule {
     pub notification_target: String,
 }
 
+#[contracttype]
 #[derive(Clone, Debug, PartialEq)]
 pub struct AlertTriggered {
     pub rule_id: u64,
