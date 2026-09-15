@@ -11,12 +11,14 @@ fn test_initialize() {
     env.mock_all_auths();
     let contract_id = env.register_contract(None, HealthRegistry);
     let client = HealthRegistryClient::new(&env, &contract_id);
+    let owner = Address::generate(&env);
     let registry = Address::generate(&env);
 
-    client.initialize(&registry);
+    client.initialize(&owner, &registry);
 
     let stored_registry = client.get_registry();
     assert_eq!(stored_registry, registry);
+    assert_eq!(client.get_owner(), owner);
 }
 
 #[test]
@@ -25,9 +27,10 @@ fn test_record_health() {
     env.mock_all_auths();
     let contract_id = env.register_contract(None, HealthRegistry);
     let client = HealthRegistryClient::new(&env, &contract_id);
+    let owner = Address::generate(&env);
     let registry = Address::generate(&env);
 
-    client.initialize(&registry);
+    client.initialize(&owner, &registry);
 
     let target = BytesN::from_array(&env, &[7u8; 32]);
     let msg = String::from_str(&env, "all good");
@@ -45,9 +48,10 @@ fn test_health_history_ordering() {
     env.mock_all_auths();
     let contract_id = env.register_contract(None, HealthRegistry);
     let client = HealthRegistryClient::new(&env, &contract_id);
+    let owner = Address::generate(&env);
     let registry = Address::generate(&env);
 
-    client.initialize(&registry);
+    client.initialize(&owner, &registry);
 
     let target = BytesN::from_array(&env, &[8u8; 32]);
     let msg = String::from_str(&env, "ok");
@@ -82,9 +86,10 @@ fn test_empty_history() {
     env.mock_all_auths();
     let contract_id = env.register_contract(None, HealthRegistry);
     let client = HealthRegistryClient::new(&env, &contract_id);
+    let owner = Address::generate(&env);
     let registry = Address::generate(&env);
 
-    client.initialize(&registry);
+    client.initialize(&owner, &registry);
 
     let target = BytesN::from_array(&env, &[10u8; 32]);
     let history = client.get_health_history(&target, &10);
