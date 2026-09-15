@@ -5,16 +5,11 @@
 On-chain health monitoring and alerting infrastructure for the Stellar ecosystem.
 
 [![CI](https://github.com/WideForgeLabs/stellarwatch-contract/actions/workflows/ci.yml/badge.svg)](https://github.com/WideForgeLabs/stellarwatch-contract/actions/workflows/ci.yml)
+[![Testnet](https://img.shields.io/badge/testnet-live-green.svg)](DEPLOYMENT.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Rust](https://img.shields.io/badge/rust-1.88%2B-orange.svg)](https://www.rust-lang.org/)
 
 ## Overview
-gamp@gamp-HP-EliteBook-840-G8-Notebook-PC:~/Music/stellarwatch-contract$ gh repo view WideForgeLabs/stellarwatch-contract --json visibility,url,description
-{
-  "description": "Soroban contracts for StellarWatch, on-chain health monitoring",
-  "url": "https://github.com/WideForgeLabs/stellarwatch-contract",
-  "visibility": "PUBLIC"
-}
-gamp@gamp-HP-EliteBook-840-G8-Notebook-PC:~/Music/stellarwatch-contract$ 
 
 StellarWatch is an open-source monitoring platform for Soroban smart contracts on the Stellar network. Soroban contracts have TTLs that expire, storage that can drift, and invocation patterns that need watching. No open-source tool exists to monitor these on-chain.
 
@@ -49,6 +44,8 @@ All contracts implement TTL extension on every persistent write to prevent stora
 | alert-rules | Yes | Yes | 5 |
 | Total | | | 14 |
 
+Live on Stellar testnet. See [DEPLOYMENT.md](DEPLOYMENT.md) for contract IDs and interaction examples.
+
 CI runs on every push: format check, clippy, WASM build, tests.
 
 ## Repo Structure
@@ -62,15 +59,17 @@ CI runs on every push: format check, clippy, WASM build, tests.
 
 ## Requirements
 
-- Rust 1.80 or later
-- wasm32-unknown-unknown target
+- Rust 1.88 or later
+- wasm32v1-none target
 - Stellar CLI for deployment
 
 ## Build
 
-Run `cargo build --target wasm32-unknown-unknown --release`
+Run `cargo +1.88 build --target wasm32v1-none --release`
 
-WASM artifacts will be written to target/wasm32-unknown-unknown/release/.
+WASM artifacts will be written to target/wasm32v1-none/release/.
+
+Note: Do not use the wasm32-unknown-unknown target. It produces WASM with reference-types and multivalue features that Soroban's runtime rejects.
 
 ## Test
 
@@ -84,8 +83,7 @@ First, list your Stellar identities with `stellar keys ls`
 
 Then deploy using the identity name:
 
-
-
+    ./scripts/deploy.sh deployer-account
 
 The script deploys in dependency order: contract-registry, then health-registry, then alert-rules. It prints all three contract IDs at the end.
 
@@ -93,9 +91,8 @@ The script deploys in dependency order: contract-registry, then health-registry,
 
 - Rust edition 2021
 - soroban-sdk 21.x
-- WASM target wasm32-unknown-unknown
+- WASM target wasm32v1-none
 - GitHub Actions for CI
-
 
 ## Maintainers
 
@@ -104,13 +101,11 @@ The script deploys in dependency order: contract-registry, then health-registry,
 | [@Ikechukwu-Patrick](https://github.com/Ikechukwu-Patrick) | Lead maintainer, contract architect | [Telegram: @IkSunshine](https://t.me/IkSunshine) |
 | [@martinifeanyi058-ship-it](https://github.com/martinifeanyi058-ship-it) | Contract engineer, alert-rules | [Telegram: @threalxavier](https://t.me/threalxavier) |
 
-
 ## Community
 
 Join the StellarForge Developers Telegram group for discussions, questions, and updates:
 
 - [StellarForge_Developers on Telegram](https://t.me/StellarForgeDevCodes)
-
 
 ## Contributing
 
@@ -125,7 +120,3 @@ See SECURITY.md for vulnerability disclosure.
 ## License
 
 MIT. See LICENSE for details.
-
-
-
-[![Testnet](https://img.shields.io/badge/testnet-live-green.svg)](DEPLOYMENT.md)
