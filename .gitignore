@@ -3,3 +3,7 @@
 *.wasm
 *.wasm.gz
 .DS_Store
+
+# Soroban test snapshots (auto-generated debug artifacts)
+**/test_snapshots/
+contract-ids-testnet.txt
