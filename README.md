@@ -125,3 +125,7 @@ See SECURITY.md for vulnerability disclosure.
 ## License
 
 MIT. See LICENSE for details.
+
+
+
+[![Testnet](https://img.shields.io/badge/testnet-live-green.svg)](DEPLOYMENT.md)
