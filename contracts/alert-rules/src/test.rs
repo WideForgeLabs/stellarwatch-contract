@@ -11,13 +11,13 @@ fn test_initialize() {
     env.mock_all_auths();
     let contract_id = env.register_contract(None, AlertRules);
     let client = AlertRulesClient::new(&env, &contract_id);
+    let owner = Address::generate(&env);
     let registry = Address::generate(&env);
     let health = Address::generate(&env);
 
-    client.initialize(&registry, &health);
+    client.initialize(&owner, &registry, &health);
 
-    let owner = client.get_owner();
-    assert_eq!(owner, contract_id);
+    assert_eq!(client.get_owner(), owner);
 }
 
 #[test]
@@ -26,10 +26,11 @@ fn test_create_and_get_rule() {
     env.mock_all_auths();
     let contract_id = env.register_contract(None, AlertRules);
     let client = AlertRulesClient::new(&env, &contract_id);
+    let owner = Address::generate(&env);
     let registry = Address::generate(&env);
     let health = Address::generate(&env);
 
-    client.initialize(&registry, &health);
+    client.initialize(&owner, &registry, &health);
 
     let target = BytesN::from_array(&env, &[5u8; 32]);
     let notif = String::from_str(&env, "webhook://example");
@@ -56,10 +57,11 @@ fn test_delete_rule() {
     env.mock_all_auths();
     let contract_id = env.register_contract(None, AlertRules);
     let client = AlertRulesClient::new(&env, &contract_id);
+    let owner = Address::generate(&env);
     let registry = Address::generate(&env);
     let health = Address::generate(&env);
 
-    client.initialize(&registry, &health);
+    client.initialize(&owner, &registry, &health);
 
     let target = BytesN::from_array(&env, &[6u8; 32]);
     let notif = String::from_str(&env, "webhook://example");
@@ -84,10 +86,11 @@ fn test_pause_and_resume() {
     env.mock_all_auths();
     let contract_id = env.register_contract(None, AlertRules);
     let client = AlertRulesClient::new(&env, &contract_id);
+    let owner = Address::generate(&env);
     let registry = Address::generate(&env);
     let health = Address::generate(&env);
 
-    client.initialize(&registry, &health);
+    client.initialize(&owner, &registry, &health);
 
     assert!(!client.is_paused());
     client.pause_alerts();

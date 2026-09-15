@@ -11,8 +11,7 @@ pub struct HealthRegistry;
 
 #[contractimpl]
 impl HealthRegistry {
-    pub fn initialize(env: Env, registry: Address) -> Result<(), Error> {
-        let owner = env.current_contract_address();
+    pub fn initialize(env: Env, owner: Address, registry: Address) -> Result<(), Error> {
         owner.require_auth();
 
         if storage::get_instance(&env).is_some() {
