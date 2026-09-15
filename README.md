@@ -1,11 +1,20 @@
 # StellarWatch Contracts
 
+![StellarWatch Banner](assets/banner.svg)
+
 On-chain health monitoring and alerting infrastructure for the Stellar ecosystem.
 
 [![CI](https://github.com/WideForgeLabs/stellarwatch-contract/actions/workflows/ci.yml/badge.svg)](https://github.com/WideForgeLabs/stellarwatch-contract/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Overview
+gamp@gamp-HP-EliteBook-840-G8-Notebook-PC:~/Music/stellarwatch-contract$ gh repo view WideForgeLabs/stellarwatch-contract --json visibility,url,description
+{
+  "description": "Soroban contracts for StellarWatch, on-chain health monitoring",
+  "url": "https://github.com/WideForgeLabs/stellarwatch-contract",
+  "visibility": "PUBLIC"
+}
+gamp@gamp-HP-EliteBook-840-G8-Notebook-PC:~/Music/stellarwatch-contract$ 
 
 StellarWatch is an open-source monitoring platform for Soroban smart contracts on the Stellar network. Soroban contracts have TTLs that expire, storage that can drift, and invocation patterns that need watching. No open-source tool exists to monitor these on-chain.
 
@@ -87,15 +96,21 @@ The script deploys in dependency order: contract-registry, then health-registry,
 - WASM target wasm32-unknown-unknown
 - GitHub Actions for CI
 
+
 ## Maintainers
 
-| Name | Role |
-|------|------|
-| Ikechukwu-Patrick | Lead maintainer, contract architect |
-| martinifeanyi058-ship-it | Contract engineer, alert-rules |
+| Name | Role | Contact |
+|------|------|---------|
+| [@Ikechukwu-Patrick](https://github.com/Ikechukwu-Patrick) | Lead maintainer, contract architect | [Telegram: @IkSunshine](https://t.me/IkSunshine) |
+| [@martinifeanyi058-ship-it](https://github.com/martinifeanyi058-ship-it) | Contract engineer, alert-rules | [Telegram: @threalxavier](https://t.me/threalxavier) |
 
-GitHub: https://github.com/Ikechukwu-Patrick
-GitHub: https://github.com/martinifeanyi058-ship-it
+
+## Community
+
+Join the StellarForge Developers Telegram group for discussions, questions, and updates:
+
+- [StellarForge_Developers on Telegram](https://t.me/StellarForgeDevCodes)
+
 
 ## Contributing
 
