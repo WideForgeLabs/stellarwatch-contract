@@ -16,7 +16,7 @@ jobs:
     with:
       release_name: ${{ github.ref_name }}
       release_description: 'contract-registry release'
-      relative_path: '["contracts/contract-registry"]'
+      relative_path: 'contracts/contract-registry'
       package: 'contract-registry'
     secrets:
       release_token: ${{ secrets.GITHUB_TOKEN }}
@@ -26,7 +26,7 @@ jobs:
     with:
       release_name: ${{ github.ref_name }}
       release_description: 'health-registry release'
-      relative_path: '["contracts/health-registry"]'
+      relative_path: 'contracts/health-registry'
       package: 'health-registry'
     secrets:
       release_token: ${{ secrets.GITHUB_TOKEN }}
@@ -36,7 +36,7 @@ jobs:
     with:
       release_name: ${{ github.ref_name }}
       release_description: 'alert-rules release'
-      relative_path: '["contracts/alert-rules"]'
+      relative_path: 'contracts/alert-rules'
       package: 'alert-rules'
     secrets:
       release_token: ${{ secrets.GITHUB_TOKEN }}
