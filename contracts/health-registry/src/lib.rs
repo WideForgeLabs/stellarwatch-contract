@@ -1,4 +1,10 @@
 #![no_std]
+use soroban_sdk::contractmeta;
+
+contractmeta!(
+    key = "source_repo",
+    val = "github:WideForgeLabs/stellarwatch-contract"
+);
 
 use soroban_sdk::{contract, contractimpl, Address, BytesN, Env, String, Vec};
 use stellarwatch_shared::{Error, HealthRecord, HealthStatus};
