@@ -38,7 +38,16 @@ Deploy in dependency order:
 
 ## Source Verification
 
-Source code verification via Stellar Expert requires contracts to be deployed from a WASM artifact produced by the official `stellar-expert/soroban-build-workflow`. This repo includes `.github/workflows/release.yml` that triggers on version tags.
+Contracts are built and attested by the stellar-expert/soroban-build-workflow GitHub Action in `.github/workflows/release.yml`. When a version tag is pushed, the workflow:
+
+1. Compiles each contract in a clean environment
+2. Creates a GitHub Release with the optimized WASM
+3. Generates a Sigstore attestation linking the WASM to the source commit
+4. Sends the attestation to Stellar Expert for verification
+
+To verify a downloaded WASM locally:
+
+    gh attestation verify contract-registry_v0.1.0.wasm --repo WideForgeLabs/stellarwatch-contract
 
 ## Notes
 

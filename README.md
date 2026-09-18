@@ -35,6 +35,10 @@ Stores configurable threshold rules for automated alerts. Rules can target speci
 
 All contracts implement TTL extension on every persistent write to prevent storage expiration on mainnet. This is a critical requirement for Soroban production deployments.
 
+## Live on Testnet
+
+All three contracts are deployed and initialized on Stellar testnet. See [DEPLOYMENT.md](DEPLOYMENT.md) for contract IDs, explorer links, and interaction examples.
+
 ## Current Status
 
 | Contract | Logic | TTL | Tests |
@@ -43,8 +47,6 @@ All contracts implement TTL extension on every persistent write to prevent stora
 | health-registry | Yes | Yes | 5 |
 | alert-rules | Yes | Yes | 5 |
 | Total | | | 14 |
-
-Live on Stellar testnet. See [DEPLOYMENT.md](DEPLOYMENT.md) for contract IDs and interaction examples.
 
 CI runs on every push: format check, clippy, WASM build, tests.
 
@@ -56,6 +58,7 @@ CI runs on every push: format check, clippy, WASM build, tests.
 - shared/ - Shared types and errors
 - scripts/deploy.sh - Deploy all three contracts in order
 - .github/workflows/ci.yml - CI pipeline
+- .github/workflows/release.yml - Source verification release workflow
 
 ## Requirements
 
@@ -86,6 +89,14 @@ Then deploy using the identity name:
     ./scripts/deploy.sh deployer-account
 
 The script deploys in dependency order: contract-registry, then health-registry, then alert-rules. It prints all three contract IDs at the end.
+
+## Source Verification
+
+The repository includes a release workflow (`.github/workflows/release.yml`) that builds reproducible WASM artifacts and generates Sigstore attestations on every version tag. This enables automatic source code verification on block explorers like Stellar Expert.
+
+Attestations are published to GitHub's attestation store and can be inspected via:
+
+    gh attestation verify <wasm-file> --repo WideForgeLabs/stellarwatch-contract
 
 ## Tech Stack
 
