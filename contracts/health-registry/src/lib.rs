@@ -3,7 +3,7 @@ use soroban_sdk::contractmeta;
 
 contractmeta!(
     key = "source_repo",
-    val = "github:WideForgeLabs/stellarwatch-contract"
+    val = "github:WideForgeLabs/stellarwatch-contract#da9ba3bcefa6a5d2512188392b2b6bd58ca9cda7"
 );
 
 use soroban_sdk::{contract, contractimpl, Address, BytesN, Env, String, Vec};
