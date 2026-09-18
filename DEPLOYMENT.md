@@ -6,9 +6,9 @@ Live deployment on Stellar testnet. All three contracts are initialized and func
 
 | Contract | Testnet Contract ID |
 |----------|---------------------|
-| contract-registry | CBLZ7ITDN5PGZITZQFWNSIBQVAZDQ7ICOUPQWBJSBYK6GCS2LHL52VSF |
-| health-registry | CBH2X5TC2EZ3DPKIOPWL5WCT4AHPLX4DBPZH36B2WMZR35DNMET4BCO3 |
-| alert-rules | CC2MBG2PVBR3LNVZXJQWECCU3R5P5STDYPNKPCB3KIHVWABHJDDGNBNO |
+| contract-registry | CDT3J5O5XQBCFQQWY2SMPWG522QVPXZK7RIHLDLSMFWW7ZQWZN76URNC |
+| health-registry | CB53FGQVY5YFSMZP4DHETWIRKOTPLKWYA3SK4Q3PFUFTJU25NZK6WTYC |
+| alert-rules | CB7WLFECVP5DOAM3362Q55DSLC5KOKIFJDADNHT47LH4SRUT5MEGMC4W |
 
 ## Deployer Public Key
 
@@ -16,15 +16,15 @@ GAFHZ5DNMEVFKISURDFHUGE5BJ5PAF6ZS2TBO6NKL2GO42IPDQIWHHYJ
 
 ## Verify on Block Explorer
 
-- contract-registry: https://stellar.expert/explorer/testnet/contract/CBLZ7ITDN5PGZITZQFWNSIBQVAZDQ7ICOUPQWBJSBYK6GCS2LHL52VSF
-- health-registry: https://stellar.expert/explorer/testnet/contract/CBH2X5TC2EZ3DPKIOPWL5WCT4AHPLX4DBPZH36B2WMZR35DNMET4BCO3
-- alert-rules: https://stellar.expert/explorer/testnet/contract/CC2MBG2PVBR3LNVZXJQWECCU3R5P5STDYPNKPCB3KIHVWABHJDDGNBNO
+- contract-registry: https://stellar.expert/explorer/testnet/contract/CDT3J5O5XQBCFQQWY2SMPWG522QVPXZK7RIHLDLSMFWW7ZQWZN76URNC
+- health-registry: https://stellar.expert/explorer/testnet/contract/CB53FGQVY5YFSMZP4DHETWIRKOTPLKWYA3SK4Q3PFUFTJU25NZK6WTYC
+- alert-rules: https://stellar.expert/explorer/testnet/contract/CB7WLFECVP5DOAM3362Q55DSLC5KOKIFJDADNHT47LH4SRUT5MEGMC4W
 
 ## Interact With the Contracts
 
 Read the owner:
 
-    stellar contract invoke --network testnet --source-account YOUR_IDENTITY --id CBLZ7ITDN5PGZITZQFWNSIBQVAZDQ7ICOUPQWBJSBYK6GCS2LHL52VSF -- get_owner
+    stellar contract invoke --network testnet --source-account YOUR_IDENTITY --id CDT3J5O5XQBCFQQWY2SMPWG522QVPXZK7RIHLDLSMFWW7ZQWZN76URNC -- get_owner
 
 ## Build and Deploy From Scratch
 
@@ -35,6 +35,10 @@ Build with Rust 1.88 and the wasm32v1-none target:
 Deploy in dependency order:
 
     ./scripts/deploy.sh YOUR_IDENTITY
+
+## Source Verification
+
+Source code verification via Stellar Expert requires contracts to be deployed from a WASM artifact produced by the official `stellar-expert/soroban-build-workflow`. This repo includes `.github/workflows/release.yml` that triggers on version tags.
 
 ## Notes
 
