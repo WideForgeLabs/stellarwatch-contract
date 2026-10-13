@@ -123,6 +123,7 @@ Join the StellarForge Developers Telegram group for discussions, questions, and 
 ## Documentation
 
 - [Contract API Reference](docs/contracts-api.md)
+- [Architecture](docs/architecture.md)
 
 
 
