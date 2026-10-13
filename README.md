@@ -118,6 +118,14 @@ Join the StellarForge Developers Telegram group for discussions, questions, and 
 
 - [StellarForge_Developers on Telegram](https://t.me/StellarForgeDevCodes)
 
+
+
+## Documentation
+
+- [Contract API Reference](docs/contracts-api.md)
+
+
+
 ## Contributing
 
 See CONTRIBUTING.md for guidelines.
