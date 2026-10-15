@@ -44,9 +44,18 @@ impl HealthRegistry {
         let config = storage::get_instance(&env).ok_or(Error::NotInitialized)?;
         storage::extend_instance_ttl(&env);
 
-        let counter = storage::get_counter(&env, &contract_id);
+        let mut counter = storage::get_counter(&env, &contract_id);
         if counter >= config.max_history as u64 {
-            return Err(Error::MaxHistoryExceeded);
+            storage::remove_record(&env, &contract_id, 1);
+            let mut i: u64 = 2;
+            while i <= counter {
+                if let Some(record) = storage::get_record(&env, &contract_id, i) {
+                    storage::set_record(&env, &contract_id, i - 1, &record);
+                }
+                i += 1;
+            }
+            counter -= 1;
+            storage::set_counter(&env, &contract_id, counter);
         }
 
         let new_index = counter + 1;
@@ -99,6 +108,19 @@ impl HealthRegistry {
         }
 
         records
+    }
+
+    pub fn set_max_history(env: Env, limit: u32) -> Result<(), Error> {
+        let mut config = storage::get_instance(&env).ok_or(Error::NotInitialized)?;
+        config.owner.require_auth();
+
+        config.max_history = limit;
+        storage::set_instance(&env, &config);
+
+        env.events()
+            .publish(("health", "max_history_updated"), (limit,));
+
+        Ok(())
     }
 
     pub fn prune_history(env: Env, contract_id: BytesN<32>, keep_count: u32) -> Result<(), Error> {

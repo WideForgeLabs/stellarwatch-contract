@@ -128,3 +128,35 @@ fn test_prune_history() {
     let after = client.get_health_history(&target, &10);
     assert_eq!(after.len(), 2);
 }
+
+#[test]
+fn test_auto_prune_on_max_history() {
+    let env = Env::default();
+    env.mock_all_auths();
+    let contract_id = env.register_contract(None, HealthRegistry);
+    let client = HealthRegistryClient::new(&env, &contract_id);
+    let owner = Address::generate(&env);
+    let registry = Address::generate(&env);
+
+    client.initialize(&owner, &registry);
+
+    // Set max_history low so we hit the limit quickly
+    client.set_max_history(&3);
+
+    let target = BytesN::from_array(&env, &[12u8; 32]);
+    let msg = String::from_str(&env, "ok");
+
+    // Record 5 entries; the first 2 should be pruned automatically
+    client.record_health(&target, &HealthStatus::Healthy, &Some(100), &msg);
+    client.record_health(&target, &HealthStatus::Healthy, &Some(110), &msg);
+    client.record_health(&target, &HealthStatus::Healthy, &Some(120), &msg);
+    client.record_health(&target, &HealthStatus::Healthy, &Some(130), &msg);
+    client.record_health(&target, &HealthStatus::Healthy, &Some(140), &msg);
+
+    let history = client.get_health_history(&target, &10);
+    assert_eq!(history.len(), 3);
+
+    // Newest should be the last one recorded
+    let latest = history.get(0).unwrap();
+    assert_eq!(latest.response_time_ms, Some(140));
+}
