@@ -101,6 +101,45 @@ impl HealthRegistry {
         records
     }
 
+    pub fn prune_history(env: Env, contract_id: BytesN<32>, keep_count: u32) -> Result<(), Error> {
+        let config = storage::get_instance(&env).ok_or(Error::NotInitialized)?;
+        config.owner.require_auth();
+        storage::extend_instance_ttl(&env);
+
+        let counter = storage::get_counter(&env, &contract_id);
+        if counter <= keep_count as u64 {
+            return Ok(());
+        }
+
+        let remove_until = counter - keep_count as u64;
+
+        let mut surviving: Vec<HealthRecord> = Vec::new(&env);
+        let mut i: u64 = remove_until + 1;
+        while i <= counter {
+            if let Some(record) = storage::get_record(&env, &contract_id, i) {
+                surviving.push_back(record);
+            }
+            i += 1;
+        }
+
+        let mut j: u64 = 1;
+        while j <= counter {
+            storage::remove_record(&env, &contract_id, j);
+            j += 1;
+        }
+
+        for (idx, record) in (1_u64..).zip(surviving.iter()) {
+            storage::set_record(&env, &contract_id, idx, &record);
+        }
+
+        storage::set_counter(&env, &contract_id, keep_count as u64);
+
+        env.events()
+            .publish(("health", "pruned"), (contract_id, keep_count));
+
+        Ok(())
+    }
+
     pub fn get_latest_health(env: Env, contract_id: BytesN<32>) -> Option<HealthRecord> {
         let counter = storage::get_counter(&env, &contract_id);
         if counter == 0 {
