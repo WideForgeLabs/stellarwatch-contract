@@ -101,7 +101,6 @@ impl HealthRegistry {
         records
     }
 
-
     pub fn prune_history(env: Env, contract_id: BytesN<32>, keep_count: u32) -> Result<(), Error> {
         let config = storage::get_instance(&env).ok_or(Error::NotInitialized)?;
         config.owner.require_auth();
@@ -137,15 +136,11 @@ impl HealthRegistry {
 
         storage::set_counter(&env, &contract_id, keep_count as u64);
 
-        env.events().publish(
-            ("health", "pruned"),
-            (contract_id, keep_count),
-        );
+        env.events()
+            .publish(("health", "pruned"), (contract_id, keep_count));
 
         Ok(())
     }
-	
-
 
     pub fn get_latest_health(env: Env, contract_id: BytesN<32>) -> Option<HealthRecord> {
         let counter = storage::get_counter(&env, &contract_id);

@@ -96,8 +96,6 @@ fn test_empty_history() {
     assert_eq!(history.len(), 0);
 }
 
-
-
 #[test]
 fn test_prune_history() {
     let env = Env::default();
