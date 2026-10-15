@@ -118,3 +118,34 @@ fn test_create_without_init_fails() {
     );
     assert!(result.is_err());
 }
+
+#[test]
+fn test_update_rule() {
+    let env = Env::default();
+    env.mock_all_auths();
+    let contract_id = env.register_contract(None, AlertRules);
+    let client = AlertRulesClient::new(&env, &contract_id);
+    let owner = Address::generate(&env);
+    let registry = Address::generate(&env);
+    let health = Address::generate(&env);
+
+    client.initialize(&owner, &registry, &health);
+
+    let target = BytesN::from_array(&env, &[20u8; 32]);
+    let notif = String::from_str(&env, "webhook://old");
+
+    let rule_id = client.create_rule(
+        &target,
+        &AlertCondition::ResponseTime,
+        &Severity::Warn,
+        &500,
+        &notif,
+    );
+
+    let new_notif = String::from_str(&env, "webhook://new");
+    client.update_rule(&rule_id, &1000, &Severity::Critical, &new_notif);
+
+    let rule = client.get_rule(&rule_id).unwrap();
+    assert_eq!(rule.threshold_value, 1000);
+    assert_eq!(rule.severity, Severity::Critical);
+}

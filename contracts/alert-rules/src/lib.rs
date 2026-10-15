@@ -83,6 +83,34 @@ impl AlertRules {
         Ok(rule_id)
     }
 
+    pub fn update_rule(
+        env: Env,
+        rule_id: u64,
+        threshold_value: u64,
+        severity: Severity,
+        notification_target: String,
+    ) -> Result<(), Error> {
+        let config = storage::get_instance(&env).ok_or(Error::NotInitialized)?;
+        config.owner.require_auth();
+        storage::extend_instance_ttl(&env);
+
+        let mut rule = storage::get_rule(&env, rule_id).ok_or(Error::RuleNotFound)?;
+
+        rule.threshold_value = threshold_value;
+        rule.severity = severity;
+        rule.notification_target = notification_target;
+        rule.updated_at = env.ledger().timestamp();
+
+        storage::set_rule(&env, rule_id, &rule);
+
+        env.events().publish(
+            ("alert", "rule_updated"),
+            (rule_id, rule.contract_id, severity),
+        );
+
+        Ok(())
+    }
+
     pub fn delete_rule(env: Env, rule_id: u64) -> Result<(), Error> {
         let config = storage::get_instance(&env).ok_or(Error::NotInitialized)?;
         config.owner.require_auth();
