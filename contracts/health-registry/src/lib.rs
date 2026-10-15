@@ -128,10 +128,8 @@ impl HealthRegistry {
             j += 1;
         }
 
-        let mut idx: u64 = 1;
-        for record in surviving.iter() {
+        for (idx, record) in (1_u64..).zip(surviving.iter()) {
             storage::set_record(&env, &contract_id, idx, &record);
-            idx += 1;
         }
 
         storage::set_counter(&env, &contract_id, keep_count as u64);
