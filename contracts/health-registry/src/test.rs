@@ -95,3 +95,38 @@ fn test_empty_history() {
     let history = client.get_health_history(&target, &10);
     assert_eq!(history.len(), 0);
 }
+
+
+
+#[test]
+fn test_prune_history() {
+    let env = Env::default();
+    env.mock_all_auths();
+    let contract_id = env.register_contract(None, HealthRegistry);
+    let client = HealthRegistryClient::new(&env, &contract_id);
+    let owner = Address::generate(&env);
+    let registry = Address::generate(&env);
+
+    client.initialize(&owner, &registry);
+
+    let target = BytesN::from_array(&env, &[11u8; 32]);
+    let msg = String::from_str(&env, "ok");
+
+    // Record 5 health entries
+    client.record_health(&target, &HealthStatus::Healthy, &Some(100), &msg);
+    client.record_health(&target, &HealthStatus::Healthy, &Some(110), &msg);
+    client.record_health(&target, &HealthStatus::Healthy, &Some(120), &msg);
+    client.record_health(&target, &HealthStatus::Healthy, &Some(130), &msg);
+    client.record_health(&target, &HealthStatus::Healthy, &Some(140), &msg);
+
+    // Confirm 5 records exist
+    let before = client.get_health_history(&target, &10);
+    assert_eq!(before.len(), 5);
+
+    // Prune down to 2
+    client.prune_history(&target, &2);
+
+    // Verify only 2 records remain
+    let after = client.get_health_history(&target, &10);
+    assert_eq!(after.len(), 2);
+}
